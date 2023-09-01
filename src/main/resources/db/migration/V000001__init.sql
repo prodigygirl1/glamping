@@ -49,6 +49,8 @@ CREATE TABLE booking (
     date_check_in         date                   NOT NULL,
     date_check_out        date                   NOT NULL,
     comment               VARCHAR(1000),
+    adult_count           int2                   NOT NULL,
+    children_count        int2                   NOT NULL,
     city                  VARCHAR(255)           NOT NULL,
     is_active             boolean                NOT NULL,
     is_paid               boolean                NOT NULL,

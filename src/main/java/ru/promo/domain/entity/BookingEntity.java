@@ -1,6 +1,7 @@
 package ru.promo.domain.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -13,12 +14,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
 @Data
 @Entity
+@Builder
 @Table(name = "booking")
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,10 +31,16 @@ public class BookingEntity {
     private UUID id;
 
     @Column(name = "date_check_in", columnDefinition = "DATE", nullable = false)
-    private Date dateCheckIn;
+    private LocalDate dateCheckIn;
 
     @Column(name = "date_check_out", columnDefinition = "DATE", nullable = false)
-    private Date dateCheckOut;
+    private LocalDate dateCheckOut;
+
+    @Column(name = "adult_count", nullable = false)
+    private Short adultCount;
+
+    @Column(name = "children_count", nullable = false)
+    private Short childrenCount;
 
     @Column(name = "comment")
     private String comment;
