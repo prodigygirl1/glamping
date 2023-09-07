@@ -5,5 +5,6 @@ import ru.promo.domain.entity.GuestEntity;
 
 public interface GuestService {
     GuestEntity saveGuest(CreateGuest createGuest);
+
     GuestEntity findByEmail(String email);
 }
