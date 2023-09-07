@@ -32,7 +32,7 @@ public class GuestEntity {
     @Column(name = "patronymic")
     private String patronymic;
 
-    @Column(name = "phone_number", nullable = false, unique = true)
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
     @Column(name = "email", nullable = false, unique = true)

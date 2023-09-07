@@ -48,7 +48,7 @@ CREATE TABLE booking (
         CONSTRAINT booking_pk PRIMARY KEY,
     date_check_in         date                   NOT NULL,
     date_check_out        date                   NOT NULL,
-    comment               VARCHAR(1000),
+    comment               VARCHAR(500),
     adult_count           int2                   NOT NULL,
     children_count        int2                   NOT NULL,
     city                  VARCHAR(255)           NOT NULL,
@@ -66,7 +66,7 @@ CREATE TABLE guest (
     surname               VARCHAR(255)           NOT NULL,
     name                  VARCHAR(255)           NOT NULL,
     patronymic            VARCHAR(255),
-    phone_number          VARCHAR(255) UNIQUE    NOT NULL,
+    phone_number          VARCHAR(255)           NOT NULL,
     email                 VARCHAR(255) UNIQUE    NOT NULL
 );
 

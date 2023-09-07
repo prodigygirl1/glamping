@@ -1,0 +1,38 @@
+server:
+  port: ${SERVER_PORT:8081}
+spring:
+  application:
+    name: glamping-app
+  jpa:
+    database: POSTGRESQL
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    url: jdbc:postgresql://localhost:5433/glamping
+    username: postgres
+    password: postgres
+    driverClassName: org.postgresql.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 3
+  flyway:
+    enabled: true
+feign:
+  client.config:
+    default:
+      read-timeout: 5000
+      connect-timeout: 1000
+  httpclient:
+    disable-ssl-validation: true
+    connection-timeout: 1000
+logging:
+  level:
+    ROOT: WARN
+    org.springframework: INFO
+    ru.promo: DEBUG
