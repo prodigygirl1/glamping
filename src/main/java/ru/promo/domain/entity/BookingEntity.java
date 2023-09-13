@@ -58,8 +58,8 @@ public class BookingEntity {
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "guest_id", referencedColumnName = "id")
-    private GuestEntity guest;
+    @JoinColumn(name = "profile_id", referencedColumnName = "id")
+    private ProfileEntity guest;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accommodation_id", referencedColumnName = "id")

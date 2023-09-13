@@ -56,24 +56,41 @@ CREATE TABLE booking (
     is_paid               boolean                NOT NULL,
     created_at            timestamp              NOT NULL,
     accommodation_id      uuid                   NOT NULL,
-    guest_id              uuid                   NOT NULL
+    profile_id            uuid                   NOT NULL
 );
 
 
-CREATE TABLE guest (
+CREATE TABLE profile (
     id                     uuid
-        CONSTRAINT guest_pk PRIMARY KEY,
+        CONSTRAINT profile_pk PRIMARY KEY,
     surname               VARCHAR(255)           NOT NULL,
     name                  VARCHAR(255)           NOT NULL,
     patronymic            VARCHAR(255),
     phone_number          VARCHAR(255)           NOT NULL,
-    email                 VARCHAR(255) UNIQUE    NOT NULL
+    email                 VARCHAR(255) UNIQUE    NOT NULL,
+    password              VARCHAR(255)           NOT NULL,
+    role_id               uuid                   NOT NULL
 );
+
+CREATE TABLE role (
+    id                     uuid
+        CONSTRAINT role_pk PRIMARY KEY,
+    name                  VARCHAR(255)           NOT NULL
+);
+
+ALTER TABLE profile
+    ADD CONSTRAINT role_id_fk
+        FOREIGN KEY (role_id)
+            REFERENCES role;
 
 ALTER TABLE booking
     ADD CONSTRAINT accommodation_id_fk
             FOREIGN KEY (accommodation_id)
                 REFERENCES accommodation,
-    ADD CONSTRAINT guest_id_fk
-        FOREIGN KEY (guest_id)
-            REFERENCES guest;
+    ADD CONSTRAINT profile_id_fk
+        FOREIGN KEY (profile_id)
+            REFERENCES profile;
+
+INSERT INTO role(id, name)
+VALUES ('51490cc3-ff2f-493e-aff3-460cfc07d7a8', 'ROLE_ADMIN'),
+       ('0a8711d2-231b-4d05-8f1c-1e86e0c57148', 'ROLE_USER');

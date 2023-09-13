@@ -6,11 +6,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.promo.domain.PreBookingRequest;
 import ru.promo.domain.entity.BookingEntity;
-import ru.promo.mapper.GuestMapper;
 import ru.promo.repository.BookingRepository;
 import ru.promo.service.AccommodationService;
 import ru.promo.service.BookingService;
-import ru.promo.service.GuestService;
+import ru.promo.service.ProfileService;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,8 +24,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
 
     private final AccommodationService accommodationService;
-    private final GuestService guestService;
-    private final GuestMapper guestMapper;
+    private final ProfileService profileService;
 
     @Override
     public void preBook(PreBookingRequest request) {
@@ -35,15 +33,7 @@ public class BookingServiceImpl implements BookingService {
             throw invalidMessage("Номер уже забронирован или не соответствует заданным условиям");
         }
 
-        var guest = guestService.findByEmail(request.getEmail());
-        if (guest != null) {
-            if (!guest.getSurname().equals(request.getSurname()) || !guest.getName().equals(request.getName())) {
-                throw invalidMessage("Указанный email уже используется");
-            }
-        } else {
-            var guestInfo = guestMapper.toCreateDto(request);
-            guest = guestService.saveGuest(guestInfo);
-        }
+        var guest = profileService.findById(request.getProfileId());
 
         var booking = BookingEntity.builder()
                 .accommodation(accommodation)

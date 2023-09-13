@@ -10,7 +10,6 @@ import ru.promo.domain.entity.AccommodationEntity;
 import ru.promo.repository.AccommodationRepository;
 import ru.promo.service.AccommodationService;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -56,28 +55,6 @@ public class AccommodationServiceImpl implements AccommodationService {
         if (findAllAvailable(searchRequest).contains(accommodation)) {
             return accommodation;
         }
-//        var type = accommodation.getType();
-//
-//        var peopleCondition = type.getChildrenCount() >= request.getChildrenCount()
-//                && type.getAdultCount() >= request.getAdultCount();
-//        var dateCondition = dateIsCorrect(type.getStartDate(), type.getEndDate(),
-//                request.getDateCheckIn(), request.getDateCheckOut());
-//
-//        if (peopleCondition && dateCondition) {
-//            return accommodation;
-//        }
         return null;
-    }
-
-    private boolean dateIsCorrect(LocalDate start_date_accommodation, LocalDate end_date_accommodation,
-                                  LocalDate start_date_booking, LocalDate end_date_booking) {
-
-        var durationYears = start_date_booking.minusYears(start_date_accommodation.getYear());
-
-        start_date_accommodation = start_date_accommodation.plusYears(durationYears.getYear());
-        end_date_accommodation = end_date_accommodation.plusYears(durationYears.getYear());
-
-        return (start_date_accommodation.isBefore(start_date_booking) || start_date_accommodation.equals(start_date_booking))
-                && (end_date_booking.isBefore(end_date_accommodation)) || end_date_booking.equals(end_date_accommodation);
     }
 }

@@ -29,17 +29,6 @@ public class PreBookingRequest {
     @NotBlank
     private String city;
 
-    @NotBlank
-    private String surname;
-
-    @NotBlank
-    private String name;
-
-    private String patronymic;
-
-    @NotBlank
-    private String phoneNumber;
-
-    @NotBlank
-    private String email;
+    @NotNull
+    private UUID profileId;
 }

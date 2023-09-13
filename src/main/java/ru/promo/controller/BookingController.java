@@ -19,7 +19,7 @@ import java.util.UUID;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Validated
-@Tag(name = "profile", description = "API для бронирования номеров")
+@Tag(name = "booking", description = "API для бронирования номеров")
 public interface BookingController {
     @Operation(summary = "Поиск свободных номеров")
     @GetMapping(value = "/api/v1/booking/", consumes = APPLICATION_JSON_VALUE)
