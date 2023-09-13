@@ -14,4 +14,6 @@ public interface BookingService {
     void cancelBooking(UUID bookingId);
 
     List<BookingEntity> findBooking(UUID bookingId, String phoneNumber, String email);
+
+    int cancelOlderThanTimeBookings(Long hours);
 }

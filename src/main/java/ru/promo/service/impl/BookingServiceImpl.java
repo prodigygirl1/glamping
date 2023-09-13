@@ -94,6 +94,12 @@ public class BookingServiceImpl implements BookingService {
         return bookingRepository.findAllByIdOrGuest_phoneNumberOrGuest_email(bookingId, phoneNumber, email);
     }
 
+    @Override
+    @Transactional
+    public int cancelOlderThanTimeBookings(Long hours) {
+        return bookingRepository.cancelOlderThanTimeBookings();
+    }
+
     public BookingEntity findById(UUID id) {
         return bookingRepository.findById(id)
                 .orElseThrow(() -> notFound("Бронирование с id %s не найдено", id));
