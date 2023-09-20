@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface BookingRepository extends JpaRepository<BookingEntity, UUID> {
-    @EntityGraph(attributePaths = {"guest", "accommodation", "accommodation.type"})
+    @EntityGraph(attributePaths = {"guest", "accommodation", "accommodation.type", "guest.role"})
     List<BookingEntity> findAllByIdOrGuest_phoneNumberOrGuest_email(UUID id, String phoneNumber, String email);
 
     @Modifying

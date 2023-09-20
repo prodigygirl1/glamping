@@ -36,3 +36,7 @@ logging:
     ROOT: WARN
     org.springframework: INFO
     ru.promo: DEBUG
+app:
+  pattern:
+    email: "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$"
+    phone-number: "^(7|\\+7|8)\\d{10}$"

@@ -27,7 +27,7 @@ public class AccommodationServiceImpl implements AccommodationService {
         var start_date_booking = request.getDateCheckIn();
         var end_date_booking = request.getDateCheckOut();
         if (start_date_booking.isAfter(end_date_booking)) {
-            throw invalidMessage("Дата начала должна быть раньше даты окончания поиска");
+            throw invalidMessage("Дата начала должна быть меньше даты окончания поиска");
         }
         return accommodationRepository.findAllAvailable(start_date_booking, end_date_booking,
                         request.getAdultCount(), request.getChildrenCount())

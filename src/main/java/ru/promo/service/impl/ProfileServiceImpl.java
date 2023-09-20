@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.promo.config.JwtProvider;
+import ru.promo.config.property.ProfilePatternProperties;
 import ru.promo.domain.AccessResponse;
 import ru.promo.domain.CreateProfileRequest;
 import ru.promo.domain.entity.ProfileEntity;
@@ -18,34 +19,44 @@ import ru.promo.service.ProfileService;
 import java.util.UUID;
 
 import static ru.promo.util.exception.BadRequestException.invalidMessage;
+import static ru.promo.util.exception.ResourceNotFoundException.notFound;
 
 @Slf4j
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class ProfileServiceImpl implements ProfileService {
     private final ProfileRepository profileRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final JwtProvider jwtProvider;
+    private final ProfilePatternProperties properties;
 
     @Override
     @Transactional
     public ProfileEntity createProfile(CreateProfileRequest request) {
-
+        if (!properties.getEmail().matcher(request.getEmail()).matches()) {
+            throw invalidMessage("Указан некорректный формат почты, повторите попытку");
+        }
         if (findByEmail(request.getEmail()) != null) {
             throw invalidMessage("Указанный email уже используется", request.getEmail());
         }
-        var profile = new ProfileEntity();
-        profile.setEmail(request.getEmail());
-        profile.setName(request.getName());
-        profile.setSurname(request.getSurname());
-        profile.setPatronymic(request.getPatronymic());
-        profile.setPhoneNumber(request.getPhoneNumber());
-        profile.setPassword(passwordEncoder.encode(request.getPassword()));
+        if (!properties.getPhoneNumber().matcher(request.getPhoneNumber()).matches()) {
+            throw invalidMessage("Указан некорректный формат номера телефона, повторите попытку");
+        }
+        var profile = ProfileEntity.builder()
+                .email(request.getEmail())
+                .surname(request.getSurname())
+                .name(request.getName())
+                .patronymic(request.getPatronymic())
+                .phoneNumber(request.getPhoneNumber())
+                .password(passwordEncoder.encode(request.getPassword()));
 
-        var role = roleRepository.findByName("ROLE_USER").get();
-        profile.setRole(role);
-        return profileRepository.save(profile);
+        var role = roleRepository.findByName("ROLE_USER");
+        if (role.isEmpty()) {
+            throw invalidMessage("Произошла ошибка, попробуйте позже");
+        }
+        profile.role(role.get());
+        return profileRepository.save(profile.build());
     }
 
     @Override
@@ -62,7 +73,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Transactional(readOnly = true)
     public ProfileEntity findById(UUID id) {
         return profileRepository.findById(id)
-                .orElseThrow(() -> invalidMessage("Пользователь с id %s не найден", id));
+                .orElseThrow(() -> notFound("Пользователь с id %s не найден", id));
     }
 
     @Override
@@ -73,6 +84,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return findByEmail(username);
+        return profileRepository.findByEmail(username)
+                .orElseThrow(() -> notFound("Пользователь с логином %s не найден", username));
     }
 }
