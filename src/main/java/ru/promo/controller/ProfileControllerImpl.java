@@ -15,9 +15,9 @@ public class ProfileControllerImpl implements ProfileController {
     private final ProfileService profileService;
 
     @Override
-    public void createGuestAccount(CreateProfileRequest request) {
+    public void createProfile(CreateProfileRequest request) {
         if (log.isDebugEnabled()) {
-            log.debug("Create guest with email {} request", request.getEmail());
+            log.debug("Create profile with email {}", request.getEmail());
         }
         profileService.createProfile(request);
     }

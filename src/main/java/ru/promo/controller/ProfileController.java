@@ -20,8 +20,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public interface ProfileController {
     @Operation(summary = "Создание аккаунта пользователя")
     @PostMapping(value = "/api/v1/profile/", consumes = APPLICATION_JSON_VALUE)
-    void createGuestAccount(@Parameter(description = "Данные аккаунта пользователя", required = true)
-                            @RequestBody @NotNull @Valid CreateProfileRequest request);
+    void createProfile(@Parameter(description = "Данные аккаунта пользователя", required = true)
+                       @RequestBody @NotNull @Valid CreateProfileRequest request);
 
     @Operation(summary = "Авторизация пользователя")
     @PostMapping(value = "/api/v1/profile/login", consumes = APPLICATION_JSON_VALUE)

@@ -12,12 +12,14 @@ import ru.promo.config.property.ProfilePatternProperties;
 import ru.promo.domain.AccessResponse;
 import ru.promo.domain.CreateProfileRequest;
 import ru.promo.domain.entity.ProfileEntity;
+import ru.promo.domain.entity.RoleEnum;
 import ru.promo.repository.ProfileRepository;
 import ru.promo.repository.RoleRepository;
 import ru.promo.service.ProfileService;
 
 import java.util.UUID;
 
+import static ru.promo.domain.entity.RoleEnum.getRoleName;
 import static ru.promo.util.exception.BadRequestException.invalidMessage;
 import static ru.promo.util.exception.ResourceNotFoundException.notFound;
 
@@ -34,6 +36,11 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     @Transactional
     public ProfileEntity createProfile(CreateProfileRequest request) {
+        return createProfile(request, getRoleName(RoleEnum.USER));
+    }
+
+    @Override
+    public ProfileEntity createProfile(CreateProfileRequest request, String roleName) {
         if (!properties.getEmail().matcher(request.getEmail()).matches()) {
             throw invalidMessage("Указан некорректный формат почты, повторите попытку");
         }
@@ -43,6 +50,10 @@ public class ProfileServiceImpl implements ProfileService {
         if (!properties.getPhoneNumber().matcher(request.getPhoneNumber()).matches()) {
             throw invalidMessage("Указан некорректный формат номера телефона, повторите попытку");
         }
+        var role = roleRepository.findByName(roleName);
+        if (role.isEmpty()) {
+            throw invalidMessage("Произошла ошибка, попробуйте позже");
+        }
         var profile = ProfileEntity.builder()
                 .email(request.getEmail())
                 .surname(request.getSurname())
@@ -51,10 +62,6 @@ public class ProfileServiceImpl implements ProfileService {
                 .phoneNumber(request.getPhoneNumber())
                 .password(passwordEncoder.encode(request.getPassword()));
 
-        var role = roleRepository.findByName("ROLE_USER");
-        if (role.isEmpty()) {
-            throw invalidMessage("Произошла ошибка, попробуйте позже");
-        }
         profile.role(role.get());
         return profileRepository.save(profile.build());
     }

@@ -4,11 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.promo.domain.CreateAccommodationRequest;
 import ru.promo.domain.PreBookingRequest;
 import ru.promo.domain.SearchAccommodationRequest;
 import ru.promo.domain.entity.AccommodationEntity;
 import ru.promo.repository.AccommodationRepository;
 import ru.promo.service.AccommodationService;
+import ru.promo.service.AccommodationTypeService;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,6 +23,7 @@ import static ru.promo.util.exception.ResourceNotFoundException.notFound;
 @RequiredArgsConstructor
 public class AccommodationServiceImpl implements AccommodationService {
     private final AccommodationRepository accommodationRepository;
+    private final AccommodationTypeService accommodationTypeService;
 
     @Override
     public List<AccommodationEntity> findAllAvailable(SearchAccommodationRequest request) {
@@ -56,5 +59,21 @@ public class AccommodationServiceImpl implements AccommodationService {
             return accommodation;
         }
         return null;
+    }
+
+    @Override
+    public void createAccommodation(CreateAccommodationRequest request) {
+        var type = accommodationTypeService.findById(request.getAccommodationTypeId());
+        var accommodation = AccommodationEntity.builder()
+                .name(request.getName())
+                .isActive(true)
+                .type(type);
+        accommodationRepository.save(accommodation.build());
+    }
+
+    @Override
+    public void deleteAccommodation(UUID id) {
+        var accommodation = findById(id);
+        accommodationRepository.delete(accommodation);
     }
 }

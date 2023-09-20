@@ -10,6 +10,8 @@ import java.util.UUID;
 public interface ProfileService extends UserDetailsService {
     ProfileEntity createProfile(CreateProfileRequest request);
 
+    ProfileEntity createProfile(CreateProfileRequest request, String role);
+
     AccessResponse auth(String email, String password);
 
     ProfileEntity findById(UUID id);
