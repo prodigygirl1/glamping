@@ -14,7 +14,7 @@ services:
 
   glamping:
     container_name: glamping_service
-    image: pgirl1/glamping:latest
+    build: .
     environment:
       DB_URL: jdbc:postgresql://postgres-glamping:5432/glamping
       DB_USERNAME: postgres
@@ -23,3 +23,5 @@ services:
       SERVER_PORT: 8080
     depends_on:
       - postgres
+    ports:
+      - "8080:8080"
