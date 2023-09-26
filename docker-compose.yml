@@ -14,7 +14,7 @@ services:
 
   glamping:
     container_name: glamping_service
-    build: .
+    image: pgirl1/glamping:latest
     environment:
       DB_URL: jdbc:postgresql://postgres-glamping:5432/glamping
       DB_USERNAME: postgres
